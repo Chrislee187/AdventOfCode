@@ -44,7 +44,7 @@ namespace AoC2015_3
                 robosTurn = !robosTurn;
 
             }
-            Console.WriteLine($"# Locations with >= 1 presents: {presentLocations.Count + roboLocations.Count}");
+             Console.WriteLine($"# Locations with >= 1 presents: {presentLocations.Count + roboLocations.Count}");
 
         }
 
