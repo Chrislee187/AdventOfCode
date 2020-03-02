@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Microsoft.VisualBasic.CompilerServices;
+
 
 namespace AoC2015_6
 {
@@ -12,15 +12,17 @@ namespace AoC2015_6
     {
         static void Main(string[] args)
         {
-            // Test();
 
-            var grid = new LightGrid();
             var data = File.ReadLines("data.txt");
 
+            var grid = new LightGrid();
             grid.Parse(data);
-
             Console.WriteLine($"Brightness: {grid.Brightness()}");
-            
+
+            var grid2 = new LightGrid();
+            grid2.ParseSlowlyUsingLinq(data);
+            Console.WriteLine($"Brightness: {grid.Brightness()}");
+
         }
 
         static void Test()
@@ -37,40 +39,56 @@ namespace AoC2015_6
 
 
         }
+        static void Test2()
+        {
+            var grid = new LightGrid();
+
+            foreach (var light in grid)
+            {
+                Console.WriteLine($"{light.X}, {light.Y}, {light.Brightness}");
+            }
+
+
+        }
     }
 
-    public class LightGrid
+    public class LightGrid : IEnumerable<Light>
     {
         public int[,] Lights = new int[1000, 1000];
 
         public void Parse(IEnumerable<string> commands)
         {
+            var count = 0;
             foreach (var line in commands)
             {
                 var lightInstruction = LightInstruction.Parse(line);
+
                 for (int y = lightInstruction.From.Y; y <= lightInstruction.To.Y; y++)
                 {
                     for (int x = lightInstruction.From.X; x <= lightInstruction.To.X; x++)
                     {
                         ChangeLight(x, y, lightInstruction.Mode);
+                        count++;
                     }
                 }
             }
         }
-
-        public int Brightness()
+        public void ParseSlowlyUsingLinq(IEnumerable<string> commands)
         {
-            var count = 0;
-            for (var y = 0; y < 1000; y++)
+            foreach (var line in commands)
             {
-                for (var x = 0; x < 1000; x++)
-                {
-                    count += Lights[x, y];
-                }
-            }
+                var lightInstruction = LightInstruction.Parse(line);
+            
+                this.Where(lightInstruction.Contains)
+                    .ToList()
+                    .ForEach(light => light.ChangeLight(lightInstruction.Mode));
 
-            return count;
+                // NOTE: You can parallize but its slower than the ToList() version
+                // .AsParallel()
+                // .ForAll(l => l.ChangeLight(lightInstruction.Mode));
+            }
         }
+        public int Brightness() => this.Sum(l => l.Brightness);
 
         private void ChangeLight(int x, int y, Mode mode)
         {
@@ -80,56 +98,20 @@ namespace AoC2015_6
                 Lights[x, y] -= 1;
             else
             {
-                Lights[x, y] +=2;
+                Lights[x, y] += 2;
             }
 
             if (Lights[x, y] < 0) Lights[x, y] = 0;
         }
-    }
-    public class LightInstruction
-    {
-        public Mode Mode { get; set; }
-        public Point From { get; set; }
-        public Point To { get; set; }
 
-        public static LightInstruction Parse(string input)
+        public IEnumerator<Light> GetEnumerator()
         {
-            var regex = new Regex(@"^(?<mode>turn off|turn on|toggle) (?<fromX>\d{1,3}),(?<fromY>\d{1,3}) through (?<toX>\d{1,3}),(?<toY>\d{1,3})");// (?<fromX>\d{3}),(?<fromY>\d{3}) through (?<toX>\d{3}),(?<toY>\d{3})");
-            
-            var match = regex.Match(input);
-
-            if (match.Success)
-            {
-                return new LightInstruction
-                {
-                    Mode = ParseMode(match.Groups["mode"]
-                        .Value),
-                    From = new Point(int.Parse(match.Groups["fromX"]
-                        .Value), int.Parse(match.Groups["fromY"]
-                        .Value)),
-                    To = new Point(int.Parse(match.Groups["toX"]
-                        .Value), int.Parse(match.Groups["toY"]
-                        .Value)),
-                };
-            }
-
-            return new LightInstruction();
+            return new LightEnumerator(Lights);
         }
 
-        private static Mode ParseMode(string mode)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            switch (mode)
-            {
-                case "turn on":
-                    return Mode.On;
-                case "turn off":
-                    return Mode.Off;
-                case "toggle":
-                    return Mode.Toggle;
-                default:
-                    throw new InvalidDataException($"Invalid mode: {mode}");
-            }
-
+            return GetEnumerator();
         }
     }
 
