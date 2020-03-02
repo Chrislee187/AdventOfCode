@@ -19,7 +19,7 @@ namespace AoC2015_6
 
             grid.Parse(data);
 
-            Console.WriteLine($"{grid.Count(true)} lights are on");
+            Console.WriteLine($"Brightness: {grid.Brightness()}");
             
         }
 
@@ -41,7 +41,7 @@ namespace AoC2015_6
 
     public class LightGrid
     {
-        public bool[,] Lights = new bool[1000, 1000];
+        public int[,] Lights = new int[1000, 1000];
 
         public void Parse(IEnumerable<string> commands)
         {
@@ -58,14 +58,14 @@ namespace AoC2015_6
             }
         }
 
-        public int Count(bool onOff)
+        public int Brightness()
         {
             var count = 0;
             for (var y = 0; y < 1000; y++)
             {
                 for (var x = 0; x < 1000; x++)
                 {
-                    if (Lights[x, y] == onOff) count++;
+                    count += Lights[x, y];
                 }
             }
 
@@ -75,13 +75,15 @@ namespace AoC2015_6
         private void ChangeLight(int x, int y, Mode mode)
         {
             if (mode == Mode.On)
-                Lights[x, y] = true;
+                Lights[x, y] += 1;
             else if (mode == Mode.Off)
-                Lights[x, y] = false;
+                Lights[x, y] -= 1;
             else
             {
-                Lights[x, y] = !Lights[x, y];
+                Lights[x, y] +=2;
             }
+
+            if (Lights[x, y] < 0) Lights[x, y] = 0;
         }
     }
     public class LightInstruction
