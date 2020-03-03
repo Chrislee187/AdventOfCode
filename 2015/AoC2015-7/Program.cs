@@ -18,18 +18,16 @@ namespace AoC2015_7
             var wireA = circuit.GetSignal(testWire);
             Console.WriteLine($"Part 1: Result for wire {testWire}: {wireA}"); // Result: 16076
 
-            // Reset the connections, could also do a clear off all the indivdual connection values;
+            // Reset the connections, could instead do a clear off all the individual connection values;
             connections = GetConnections();
 
             // Override b to the value of wireA
             var connection = connections.Single(c => c.WireId == "b");
             connection.OverrideValue(wireA);
             
-
             circuit = new Circuit(connections);
 
             Console.WriteLine($"Part 2: Result for wire {testWire}: {circuit.GetSignal(testWire)}"); // Result: 2797
-
         }
 
         private static List<Connection> GetConnections()

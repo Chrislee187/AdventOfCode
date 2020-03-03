@@ -51,18 +51,14 @@ namespace AoC2015_7
             switch (token)
             {
                 case "->":
-                    Console.WriteLine($"Assignment: {token}");
                     return true;
                 case { } when int.TryParse(token, out var value):
-                    Console.WriteLine($"Value token: {value}");
                     tokens.Add(new IntegerToken(value));
                     break;
                 case { } s when s.Equals(s.ToLower()):
-                    Console.WriteLine($"Wire WireId: {token}");
                     tokens.Add(new WireIdToken(token));
                     break;
                 case { } s when s.Equals(s.ToUpper()):
-                    Console.WriteLine($"Operator: {token}");
                     tokens.Add(new OperatorToken(token));
                     break;
 
@@ -72,7 +68,6 @@ namespace AoC2015_7
         }
         private int GetSignal(Dictionary<string, Connection> connections)
         {
-            Console.WriteLine($"{Line}");
             var valueTokens = _parsedTokens.OfType<ValueToken>().ToArray();
 
             var opToken = _parsedTokens.OfType<OperatorToken>()
@@ -88,7 +83,7 @@ namespace AoC2015_7
                 result = ResolveExpression(connections, opToken, valueTokens);
             }
             
-            Console.WriteLine($"  {WireId} = {result}");
+            // Console.WriteLine($"  {WireId} = {result}");
             return result;
         }
 
