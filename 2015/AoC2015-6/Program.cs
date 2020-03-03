@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+// ReSharper disable UnusedMember.Local
 
 
 namespace AoC2015_6
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
 
-            var data = File.ReadLines("data.txt");
+            var data = File.ReadLines("data.txt").ToList();
 
             var grid = new LightGrid();
             grid.Parse(data);
@@ -58,7 +59,6 @@ namespace AoC2015_6
 
         public void Parse(IEnumerable<string> commands)
         {
-            var count = 0;
             foreach (var line in commands)
             {
                 var lightInstruction = LightInstruction.Parse(line);
@@ -68,7 +68,6 @@ namespace AoC2015_6
                     for (int x = lightInstruction.From.X; x <= lightInstruction.To.X; x++)
                     {
                         ChangeLight(x, y, lightInstruction.Mode);
-                        count++;
                     }
                 }
             }
@@ -78,12 +77,13 @@ namespace AoC2015_6
             foreach (var line in commands)
             {
                 var lightInstruction = LightInstruction.Parse(line);
-            
+
+                // NOTE: slower than the array version in Parse()
                 this.Where(lightInstruction.Contains)
                     .ToList()
                     .ForEach(light => light.ChangeLight(lightInstruction.Mode));
 
-                // NOTE: You can parallize but its slower than the ToList() version
+                // NOTE: slower than the ToList() version
                 // .AsParallel()
                 // .ForAll(l => l.ChangeLight(lightInstruction.Mode));
             }

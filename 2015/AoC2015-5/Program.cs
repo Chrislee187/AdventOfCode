@@ -9,16 +9,16 @@ namespace AoC2015_5
     class Program
     {
 
-        static void Main(string[] args)
+        static void Main()
         {
             Debug.Assert(IsNaughty("ugknbfddgicrmopn") == false );
             Debug.Assert(IsNaughty("aaa") == false );
-            Debug.Assert(IsNaughty("jchzalrnumimnmhp") == true );
-            Debug.Assert(IsNaughty("haegwjzuvuyypxyu") == true );
-            Debug.Assert(IsNaughty("dvszwmarrgswjxmb") == true );
+            Debug.Assert(IsNaughty("jchzalrnumimnmhp") );
+            Debug.Assert(IsNaughty("haegwjzuvuyypxyu") );
+            Debug.Assert(IsNaughty("dvszwmarrgswjxmb") );
             
-            Debug.Assert(IsNice("qjhvhtzxzqqjkmpb") == true );
-            Debug.Assert(IsNice("xxyxx") == true);
+            Debug.Assert(IsNice("qjhvhtzxzqqjkmpb") );
+            Debug.Assert(IsNice("xxyxx"));
             Debug.Assert(IsNice("uurcxstgmygtbstg") == false );
             Debug.Assert(IsNice("ieodomkazucvgmuy") == false);
 
@@ -55,8 +55,6 @@ namespace AoC2015_5
         {
             var pairs = new List<(string pair, int index)>(); // pair, string index
 
-            var lineIdx = 0;
-
             for (int i = 0; i < line.Length-1; i++)
             {
                 pairs.Add((line.Substring(i, 2), i));
@@ -65,7 +63,8 @@ namespace AoC2015_5
             var doublePairs = pairs
                 .GroupBy(p => p.pair)
                 .Where(p => p.Count() > 1)
-                .OrderBy(p => p.Count());
+                .OrderBy(p => p.Count())
+                .ToList();
 
             if (!doublePairs.Any()) return false;
 
@@ -112,11 +111,11 @@ namespace AoC2015_5
             return false;
         }
 
-        private const string vowels = "aeiou";
+        private const string Vowels = "aeiou";
 
         private static int CountVowels(string input)
         {
-            return vowels.Sum(v => CountLetter(input, v));
+            return Vowels.Sum(v => CountLetter(input, v));
         }
 
         private static int CountLetter(string input, char letter)

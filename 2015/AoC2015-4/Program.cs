@@ -7,14 +7,14 @@ namespace AoC2015_4
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             // var testInput = "abcdef609043";
             var testInput = "ckczppom";
 
             var index = 1;
 
-            var numberOfZeroesToMatch = 10;
+            var numberOfZeroesToMatch = 5;
             var matchValue = new string('0', numberOfZeroesToMatch);
             using (MD5 md5 = MD5.Create())
             {
@@ -48,9 +48,8 @@ namespace AoC2015_4
                 .ComputeHash(Encoding.UTF8.GetBytes(testInput));
             // .Select(v => (int) v);
 
-            var sb = new StringBuilder();
-
             var hex = hash
+                // ReSharper disable once RedundantAssignment - DO NOT follow R# on this one!
                 .Aggregate("", (s, v) => s += v.ToString("X2"));
             return hex;
         }

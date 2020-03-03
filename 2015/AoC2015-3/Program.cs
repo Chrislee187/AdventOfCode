@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
 
 namespace AoC2015_3
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var data = File.ReadAllText("data.txt");
 
             var presentLocations = new Dictionary<(int,int), int>();
-            var roboLocations = new Dictionary<(int,int), int>();
 
             (int x, int y) santaLoc = (0,0);
             (int x, int y) roboLoc = (0,0);
@@ -44,7 +41,7 @@ namespace AoC2015_3
                 robosTurn = !robosTurn;
 
             }
-             Console.WriteLine($"# Locations with >= 1 presents: {presentLocations.Count + roboLocations.Count}");
+             Console.WriteLine($"# Locations with >= 1 presents: {presentLocations.Count }");
 
         }
 

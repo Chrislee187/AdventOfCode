@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.VisualBasic;
 
 namespace AoC2015_1
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var data = File.ReadAllText("data.txt").ToList();
             var index = 0;

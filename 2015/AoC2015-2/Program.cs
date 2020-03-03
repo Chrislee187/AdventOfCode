@@ -6,7 +6,7 @@ namespace AoC2015_2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var data = File.ReadLines("data.txt");
             var totalPaperArea = 0;
