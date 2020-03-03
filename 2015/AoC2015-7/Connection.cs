@@ -128,5 +128,10 @@ namespace AoC2015_7
 
             return result;
         }
+
+        public void OverrideValue(int i)
+        {
+            _value = i;
+        }
     }
 }
