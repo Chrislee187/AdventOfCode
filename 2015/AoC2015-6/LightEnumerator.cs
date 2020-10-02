@@ -48,7 +48,7 @@ namespace AoC2015_6
             Brightness = _lightGrid[_currentX, _currentY]
         };
 
-        object? IEnumerator.Current => Current;
+        object IEnumerator.Current => Current;
 
         public void Dispose()
         {

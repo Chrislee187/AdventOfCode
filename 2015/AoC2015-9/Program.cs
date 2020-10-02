@@ -23,11 +23,12 @@ namespace AoC2015_9
 
         private static void DumpRoute(IEnumerable<RouteStep> route)
         {
-            foreach (var routeData in route)
+            var routeSteps = route as RouteStep[] ?? route.ToArray();
+            foreach (var step in routeSteps)
             {
-                Console.Write($"{routeData.From.Substring(0, 2)}:{routeData.To.Substring(0, 2)}({routeData.Distance}) ");
+                Console.Write($"{step.From.Substring(0, 2)}:{step.To.Substring(0, 2)}({step.Distance}) ");
             }
-            Console.WriteLine($"={route.Sum(rd => rd.Distance)}");
+            Console.WriteLine($"={routeSteps.Sum(rd => rd.Distance)}");
         }
 
 
