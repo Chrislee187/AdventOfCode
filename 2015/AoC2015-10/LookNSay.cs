@@ -14,6 +14,7 @@ namespace AoC2015_10
             var currentCount = 0;
 
             // NOTE: 40+ iterations, started to slowdown with normal string concatenation so use SB, this starts to slow down after 60ish iterations
+            // There is probably a better way, https://www.youtube.com/watch?v=ea7lJkEhytA might make more sense another time!
             var result = new StringBuilder(input.Length * 2); 
             foreach (var c in input)
             {
